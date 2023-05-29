@@ -2,6 +2,8 @@ package myProject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * This class is used for ...
@@ -11,6 +13,10 @@ import java.awt.*;
 public class GUI extends JFrame {
 
     private Header headerProject;
+    private Escucha escucha;
+    private JButton inicio;
+    private JPanel jugador_name;
+
 
     /**
      * Constructor of GUI class
@@ -19,10 +25,9 @@ public class GUI extends JFrame {
         initGUI();
 
         //Default JFrame configuration
-        this.setTitle("The Title app");
-        this.setSize(200,100);
-        //this.pack();
-        this.setResizable(true);
+        this.setTitle("I Know That Word");
+        this.setSize(700,500);
+        this.setResizable(false);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -36,10 +41,53 @@ public class GUI extends JFrame {
         //Set up JFrame Container's Layout
         //Create Listener Object and Control Object
         //Set up JComponents
-        headerProject = new Header("Header ...", Color.BLACK);
+        headerProject = new Header("I Know That Word", Color.BLACK);
+        escucha = new Escucha();
+
+
+        JButton botonAyuda = new JButton("Ayuda");
+        inicio = new JButton("Inicio");
+        inicio.addActionListener(escucha);
+        jugador_name = new JPanel();
+        jugador_name.setBackground(Color.CYAN);
+        jugador_name.setPreferredSize(new Dimension(500, 120));
+        this.add(jugador_name, BorderLayout.CENTER);
+
+        // Crear el panel principal con BorderLayout
+        JPanel panelPrincipal = new JPanel(new BorderLayout());
+
+        // Crear el panel superior
+        JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        panelSuperior.add(botonAyuda);
+
+        // Crear el panel inferior
+        JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelInferior.add(inicio);
+
+        panelPrincipal.add(panelSuperior, BorderLayout.NORTH);
+        panelPrincipal.add(panelInferior, BorderLayout.SOUTH);
+
+        this.add(panelPrincipal);
+
 
         this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
+
+        botonAyuda.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(rootPane, "Se te presentara una secuencia de palabras,una detras de otra. Memorizalas todas. El orden no es relevante ", "Ayuda", JOptionPane.PLAIN_MESSAGE, null);
+            }
+        });
+
+
+
+
+
+
+
+
     }
+
 
     /**
      * Main process of the Java program
@@ -55,7 +103,15 @@ public class GUI extends JFrame {
     /**
      * inner class that extends an Adapter Class or implements Listeners used by GUI class
      */
-    private class Escucha {
+    private class Escucha implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == inicio) {
+                jugador_name.setVisible(true);
+                System.out.println("adentro de inicio");
 
+            }
+
+        }
     }
 }
