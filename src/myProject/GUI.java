@@ -14,8 +14,8 @@ public class GUI extends JFrame {
 
     private Header headerProject;
     private Escucha escucha;
-    private JButton inicio;
-    private JPanel jugador_name;
+    private JButton inicio, guardar_nombre;
+    private JPanel jugador_name, panelPrincipal;
 
 
     /**
@@ -50,11 +50,20 @@ public class GUI extends JFrame {
         inicio.addActionListener(escucha);
         jugador_name = new JPanel();
         jugador_name.setBackground(Color.CYAN);
+        Label label = new Label("Nombre:");
+        TextField textField = new TextField(20);
+        guardar_nombre = new JButton("Guardar");
+        guardar_nombre.addActionListener(escucha);
+        jugador_name.setLayout(new FlowLayout());
+        jugador_name.add(label);
+        jugador_name.add(textField);
+        jugador_name.add(guardar_nombre);
+
         jugador_name.setPreferredSize(new Dimension(500, 120));
         this.add(jugador_name, BorderLayout.CENTER);
 
         // Crear el panel principal con BorderLayout
-        JPanel panelPrincipal = new JPanel(new BorderLayout());
+         panelPrincipal = new JPanel(new BorderLayout());
 
         // Crear el panel superior
         JPanel panelSuperior = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -107,8 +116,16 @@ public class GUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == inicio) {
-                jugador_name.setVisible(true);
+
+                remove(panelPrincipal);
+                add(jugador_name);
+                repaint();
+                revalidate();
                 System.out.println("adentro de inicio");
+
+            }
+            if (e.getSource() == guardar_nombre) {
+                System.out.println("adentro de guardar nombre");
 
             }
 
