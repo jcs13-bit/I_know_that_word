@@ -16,6 +16,15 @@ public class GUI extends JFrame {
     private Escucha escucha;
     private JButton inicio, guardar_nombre;
     private JPanel jugador_name, panelPrincipal;
+    private Jugador jugador;
+
+    private String jugador_nombre = null;
+
+    private int nivelMaximoSuperado = 0;
+
+    private int nivelActual = 1;
+
+    private TextField nombre;
 
 
     /**
@@ -43,6 +52,8 @@ public class GUI extends JFrame {
         //Set up JComponents
         headerProject = new Header("I Know That Word", Color.BLACK);
         escucha = new Escucha();
+        jugador = new Jugador();
+
 
 
         JButton botonAyuda = new JButton("Ayuda");
@@ -51,12 +62,12 @@ public class GUI extends JFrame {
         jugador_name = new JPanel();
         jugador_name.setBackground(Color.CYAN);
         Label label = new Label("Nombre:");
-        TextField textField = new TextField(20);
+        nombre = new TextField(20);
         guardar_nombre = new JButton("Guardar");
         guardar_nombre.addActionListener(escucha);
         jugador_name.setLayout(new FlowLayout());
         jugador_name.add(label);
-        jugador_name.add(textField);
+        jugador_name.add(nombre);
         jugador_name.add(guardar_nombre);
 
         jugador_name.setPreferredSize(new Dimension(500, 120));
@@ -125,8 +136,50 @@ public class GUI extends JFrame {
 
             }
             if (e.getSource() == guardar_nombre) {
+
                 System.out.println("adentro de guardar nombre");
 
+                jugador_nombre = nombre.getText().replaceAll("\\s+", "");
+
+                System.out.println(nombre);
+                System.out.println(jugador_nombre);
+
+
+
+
+                if (jugador.validarNombre(jugador_nombre) == true) {
+                    if (jugador.validar_registro(jugador_nombre) == true) {
+                        nivelMaximoSuperado = jugador.getNivel();
+
+                        if (nivelMaximoSuperado < 0 || nivelMaximoSuperado > 10) {
+                            JOptionPane.showMessageDialog(null, "Error de sistema.");
+                            System.exit(0);
+                        }
+
+                        if (nivelMaximoSuperado == 10) {
+                            nivelActual = 10;
+                        } else {
+                            nivelActual = nivelMaximoSuperado + 1;
+                        }
+                        JOptionPane.showMessageDialog(null, "Usted ya se encuentra registrado, su nivel máximo superado es: " + nivelMaximoSuperado);
+                    } else {
+                        nivelActual = 1;
+                        nivelMaximoSuperado = 0;
+                        if (jugador.validarNombre(jugador_nombre) == true) {
+                            jugador.registrarJugador(jugador_nombre, nivelMaximoSuperado);
+                        } else {
+                            if (jugador.validar_registro(jugador_nombre) == true) {
+                                jugador.actualizarUsuario(jugador_nombre, nivelMaximoSuperado);
+                            } else {
+                                jugador.registrarJugador(jugador_nombre, nivelMaximoSuperado);
+                            }
+                        }
+
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "El nombre es muy corto o está vacío");
+                }
             }
 
         }
