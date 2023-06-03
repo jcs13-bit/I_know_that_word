@@ -30,17 +30,18 @@ public class Jugador {
             return false;
         }
     }
-    public int getNivel() {
-        nivel = Integer.parseInt(listaNiveles.get(puesto));
-        return nivel;
-    }
     public boolean validarNombre(String nombre) {
-        if (nombre == null || nombre == "") {
+        if (nombre == null || nombre.equals("")) {
             return false;
         } else {
             return true;
         }
     }
+    public int getNivel() {
+        nivel = Integer.parseInt(listaNiveles.get(puesto));
+        return nivel;
+    }
+
     public void registrarJugador(String nombre, int nivelSuperado) {
         try {
             fileWriter = new FileWriter("src/myProject/recursos/jugadores.txt", true);//True=conservar, False=Borrar

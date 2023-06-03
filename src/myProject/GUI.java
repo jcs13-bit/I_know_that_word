@@ -20,7 +20,7 @@ public class GUI extends JFrame {
 
     private String jugador_nombre = null;
 
-    private int nivelMaximoSuperado = 0;
+    private int nivelMaximoSuperado = 1;
 
     private int nivelActual = 1;
 
@@ -139,42 +139,19 @@ public class GUI extends JFrame {
 
                 System.out.println("adentro de guardar nombre");
 
-                jugador_nombre = nombre.getText().replaceAll("\\s+", "");
+                jugador_nombre = nombre.getText().replaceAll("\\s", "");
 
                 System.out.println(nombre);
                 System.out.println(jugador_nombre);
 
 
 
-
                 if (jugador.validarNombre(jugador_nombre) == true) {
                     if (jugador.validar_registro(jugador_nombre) == true) {
-                        nivelMaximoSuperado = jugador.getNivel();
-
-                        if (nivelMaximoSuperado < 0 || nivelMaximoSuperado > 10) {
-                            JOptionPane.showMessageDialog(null, "Error de sistema.");
-                            System.exit(0);
-                        }
-
-                        if (nivelMaximoSuperado == 10) {
-                            nivelActual = 10;
-                        } else {
-                            nivelActual = nivelMaximoSuperado + 1;
-                        }
-                        JOptionPane.showMessageDialog(null, "Usted ya se encuentra registrado, su nivel máximo superado es: " + nivelMaximoSuperado);
-                    } else {
-                        nivelActual = 1;
-                        nivelMaximoSuperado = 0;
-                        if (jugador.validarNombre(jugador_nombre) == true) {
-                            jugador.registrarJugador(jugador_nombre, nivelMaximoSuperado);
-                        } else {
-                            if (jugador.validar_registro(jugador_nombre) == true) {
-                                jugador.actualizarUsuario(jugador_nombre, nivelMaximoSuperado);
-                            } else {
-                                jugador.registrarJugador(jugador_nombre, nivelMaximoSuperado);
-                            }
-                        }
-
+                        JOptionPane.showMessageDialog(null, "El jugador ya existe");
+                    }
+                    else{
+                        jugador.registrarJugador(jugador_nombre, nivelMaximoSuperado);
                     }
 
                 } else {
