@@ -36,7 +36,6 @@ public class Almacen {
         }else{
             getFrase();
         }
-        System.out.println(palabras_vistas);
         return palabra;
 
 
@@ -46,7 +45,7 @@ public class Almacen {
         palabras_preguntar = new ArrayList<>(palabras_vistas);
 
 
-        for (int i = 0; i < totalAMemorizar; i++) {
+        for (int i = 0; i <= totalAMemorizar; i++) {
             Random aleatorio = new Random();
             String palabra = diccionario.get(aleatorio.nextInt(diccionario.size()));
             if (!palabras_vistas.contains(palabra)) {
@@ -56,7 +55,6 @@ public class Almacen {
             }
         }
         Collections.shuffle(palabras_preguntar);
-        System.out.println(palabras_preguntar);
 
         return palabras_preguntar;
     }
