@@ -93,7 +93,7 @@ public class ModelIKnowThatWord {
     }
     public void setRespuesta( Boolean respuesta){
         Boolean respuesta_validada = almacen.validarRespuesta(respuesta, palabras_preguntada);
-        System.out.println("Respuesta correcta: " + respuesta_validada);
+
         if (respuesta_validada==true)
         {
             aciertos++;
@@ -130,4 +130,9 @@ public class ModelIKnowThatWord {
         aciertos = 0;
         almacen.limpiarAlmacen();
     }
+    public void setNivelActual( Integer nivel)
+    {
+        nivelActual = nivel;
+    }
+
 }

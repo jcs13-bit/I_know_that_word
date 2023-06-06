@@ -111,10 +111,10 @@ public class GUI extends JFrame {
         panelPrincipal.add(panelWords, BorderLayout.CENTER);
         //this.addKeyListener(escucha);
         setFocusable(true);
-        panelWords.pintarPalabra("Nivel: 1");
 
-        timerSetWord = new Timer(5000, escuchaSetWords);
-        timerPreguntas = new Timer(7000, escuchaPreguntas);
+
+        timerSetWord = new Timer(1000, escuchaSetWords);
+        timerPreguntas = new Timer(4000, escuchaPreguntas);
         cambioContexto = new Timer(5000, escuchaCambioContexto);
 
         this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
@@ -173,23 +173,27 @@ public class GUI extends JFrame {
                 add(jugador_name);
                 repaint();
                 revalidate();
-                System.out.println("adentro de inicio");
+
 
             }
             if (e.getSource() == guardar_nombre) {
 
-                System.out.println("adentro de guardar nombre");
+
 
                 jugador_nombre = nombre.getText().replaceAll("\\s", "");
 
-                System.out.println(nombre);
-                System.out.println(jugador_nombre);
+
 
 
 
                 if (jugador.validarNombre(jugador_nombre) == true) {
                     if (jugador.validar_registro(jugador_nombre) == true) {
-                        JOptionPane.showMessageDialog(null, "El jugador ya existe");
+                        JOptionPane.showMessageDialog(null, "Hola de nuevo "+jugador_nombre+"! Tu nivel máximo es: "+jugador.getNivelMaximo());
+                        nivelActual= jugador.getNivelMaximo();
+                        jugador.actulizarNivel(nivelActual);
+                        modelIKnowThatWord.setNivelActual(nivelActual);
+                        panelWords.pintarPalabra("Nivel: " + nivelActual);
+                        modelIKnowThatWord.verificarNivel();
                     }
                     else{
                         jugador.registrarJugador(jugador_nombre, nivelMaximoSuperado);
@@ -198,6 +202,7 @@ public class GUI extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(null, "El nombre es muy corto o está vacío");
                 }
+
                 Iniciar();
             }  
 
@@ -213,7 +218,7 @@ public class GUI extends JFrame {
             numeroPalabraActual = 0;
             timerSetWord.start();
             inicio.setVisible(false);
-            headerProject = new Header("nivel" + nivelActual, Color.BLACK);
+            headerProject = new Header("Nivel: " + nivelActual, Color.BLACK);
             panelWords.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
             revalidate();
             repaint();
@@ -314,7 +319,9 @@ public class GUI extends JFrame {
             modelIKnowThatWord.verificarNivel();
             headerProject.setText("Nivel: " + nivelActual);
             panelWords.pintarPalabra("Nivel " + nivelActual + ", Preparate");
+            jugador.actulizarNivel(nivelActual);
             setTimeout(() -> timerSetWord.start(), 7000);
+
         }
 
         public void reiniciarNivel()
