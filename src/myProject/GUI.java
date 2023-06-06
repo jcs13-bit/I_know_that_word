@@ -12,11 +12,27 @@ import java.awt.event.ActionListener;
  */
 public class GUI extends JFrame {
 
+
+    private Timer timerSetWord;
     private Header headerProject;
     private Escucha escucha;
+    private EscuchaSetWords escuchaSetWords;
     private JButton inicio, guardar_nombre;
     private JPanel jugador_name, panelPrincipal;
+    private Jugador jugador;
+    private Integer numeroPalabraActual;
 
+    private String jugador_nombre = null;
+
+    private int nivelMaximoSuperado = 1;
+
+    private int nivelActual = 1;
+
+    private TextField nombre;
+
+    private PanelWords panelWords;
+
+    private ModelIKnowThatWord modelIKnowThatWord;
 
     /**
      * Constructor of GUI class
@@ -43,6 +59,10 @@ public class GUI extends JFrame {
         //Set up JComponents
         headerProject = new Header("I Know That Word", Color.BLACK);
         escucha = new Escucha();
+        escuchaSetWords = new EscuchaSetWords();
+        jugador = new Jugador();
+        modelIKnowThatWord = new ModelIKnowThatWord();
+
 
 
         JButton botonAyuda = new JButton("Ayuda");
@@ -51,12 +71,12 @@ public class GUI extends JFrame {
         jugador_name = new JPanel();
         jugador_name.setBackground(Color.CYAN);
         Label label = new Label("Nombre:");
-        TextField textField = new TextField(20);
+        nombre = new TextField(20);
         guardar_nombre = new JButton("Guardar");
         guardar_nombre.addActionListener(escucha);
         jugador_name.setLayout(new FlowLayout());
         jugador_name.add(label);
-        jugador_name.add(textField);
+        jugador_name.add(nombre);
         jugador_name.add(guardar_nombre);
 
         jugador_name.setPreferredSize(new Dimension(500, 120));
@@ -77,7 +97,14 @@ public class GUI extends JFrame {
         panelPrincipal.add(panelInferior, BorderLayout.SOUTH);
 
         this.add(panelPrincipal);
+        panelWords= new PanelWords();
+        panelWords.setVisible(false);
+        panelPrincipal.add(panelWords, BorderLayout.CENTER);
+        //this.addKeyListener(escucha);
+        setFocusable(true);
+        panelWords.pintarPalabra("Nivel: 1");
 
+        timerSetWord = new Timer(500, escuchaSetWords);
 
         this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
 
@@ -125,10 +152,57 @@ public class GUI extends JFrame {
 
             }
             if (e.getSource() == guardar_nombre) {
+
                 System.out.println("adentro de guardar nombre");
 
+                jugador_nombre = nombre.getText().replaceAll("\\s", "");
+
+                System.out.println(nombre);
+                System.out.println(jugador_nombre);
+
+
+
+                if (jugador.validarNombre(jugador_nombre) == true) {
+                    if (jugador.validar_registro(jugador_nombre) == true) {
+                        JOptionPane.showMessageDialog(null, "El jugador ya existe");
+                    }
+                    else{
+                        jugador.registrarJugador(jugador_nombre, nivelMaximoSuperado);
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "El nombre es muy corto o está vacío");
+                }
+                Iniciar();
             }
 
+
+
         }
+
+        public void Iniciar()
+        {
+            remove(jugador_name);
+            add(panelPrincipal);
+            panelWords.setVisible(true);
+            numeroPalabraActual = 1;
+            timerSetWord.start();
+            revalidate();
+            repaint();
+        }
+    }
+
+    private class EscuchaSetWords implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Integer totalAMemorizar = modelIKnowThatWord.getPalabrasMemorizar();
+            numeroPalabraActual++;
+            panelWords.pintarPalabra(modelIKnowThatWord.getPalabraMemorizar());
+            if (numeroPalabraActual == 11)
+            {
+                timerSetWord.stop();
+            }
+        }
+
     }
 }
