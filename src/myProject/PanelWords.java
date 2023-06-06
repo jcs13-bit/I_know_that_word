@@ -40,7 +40,7 @@ public class PanelWords extends JPanel {
 
         g.setFont(new Font(Font.DIALOG, Font.BOLD, 30));
         g.setColor(Color.BLACK);
-        g.drawString(palabra, WIDTH / 3, HEIGTH / 2);
+        g.drawString(palabra, WIDTH / 3, HEIGTH / 5);
 
     }
 
