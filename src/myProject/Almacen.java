@@ -63,4 +63,20 @@ public class Almacen {
     public ArrayList<String> getDiccionario() {
         return diccionario;
     }
+    public Boolean validarRespuesta(Boolean repuesta, String palabras_preguntada){
+        if (repuesta && palabras_vistas.contains(palabras_preguntada)){
+            return true;
+        } else if (repuesta && !palabras_vistas.contains(palabras_preguntada)) {
+            return false;
+        }else if (!repuesta && palabras_vistas.contains(palabras_preguntada)) {
+            return false;
+        }else if (!repuesta && !palabras_vistas.contains(palabras_preguntada)) {
+            return true;
+        }
+        else{
+            return false;
+        }
+
+
+    }
 }
