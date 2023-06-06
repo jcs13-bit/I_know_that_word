@@ -19,8 +19,9 @@ public class GUI extends JFrame {
     private EscuchaSetWords escuchaSetWords;
     private EscuchaPreguntas escuchaPreguntas;
     private EscuchaCambioContexto escuchaCambioContexto;
+    private EscuchaRespuestas escuchaRespuestas;
     private JButton inicio, guardar_nombre,si , no ;
-    private JPanel jugador_name, panelPrincipal;
+    private JPanel jugador_name, panelPrincipal, panelInferiorBotones;
     private Jugador jugador;
     private Integer numeroPalabraActual;
 
@@ -65,6 +66,7 @@ public class GUI extends JFrame {
         escucha = new Escucha();
         escuchaSetWords = new EscuchaSetWords();
         escuchaPreguntas = new EscuchaPreguntas();
+        escuchaRespuestas = new EscuchaRespuestas();
         escuchaCambioContexto = new EscuchaCambioContexto();
         jugador = new Jugador();
         modelIKnowThatWord = new ModelIKnowThatWord();
@@ -112,7 +114,7 @@ public class GUI extends JFrame {
         panelWords.pintarPalabra("Nivel: 1");
 
         timerSetWord = new Timer(500, escuchaSetWords);
-        timerPreguntas = new Timer(500, escuchaPreguntas);
+        timerPreguntas = new Timer(7000, escuchaPreguntas);
         cambioContexto = new Timer(5000, escuchaCambioContexto);
 
         this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
@@ -228,24 +230,41 @@ public class GUI extends JFrame {
             timerPreguntas.start();
             si = new JButton("Si");
             no = new JButton("No");
+            si.addActionListener(escuchaRespuestas);
+            no.addActionListener(escuchaRespuestas);
             si.setSize(100,100);
             no.setSize(100,100);
-            JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            panelInferior.add(si);
-            panelInferior.add(no);
-            panelPrincipal.add(panelInferior, BorderLayout.SOUTH);
+            panelInferiorBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelInferiorBotones.add(si);
+            panelInferiorBotones.add(no);
+            panelInferiorBotones.setVisible(false);
+            panelPrincipal.add(panelInferiorBotones, BorderLayout.SOUTH);
             repaint();
             revalidate();
 
         }
 
-
-
     }
-    private class EscuchaPreguntas implements ActionListener{
+    private class EscuchaRespuestas implements ActionListener{
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (e.getSource() == si){
+                   modelIKnowThatWord.setRespuesta(true);
+
+            }
+            else{
+                modelIKnowThatWord.setRespuesta(false);
+            }
+
+        }
+    }
+    private class EscuchaPreguntas implements ActionListener{
+
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            panelInferiorBotones.setVisible(true);
             panelWords.pintarPalabra(modelIKnowThatWord.getPalabraPreguntar(numeroPalabraActual));
             Integer totalAMemorizar = modelIKnowThatWord.getPalabrasMemorizar();
             numeroPalabraActual++;

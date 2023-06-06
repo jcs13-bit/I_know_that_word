@@ -9,6 +9,8 @@ public class ModelIKnowThatWord {
     private Integer aciertosNecesarios;
     private Integer nivelActual;
     private Almacen almacen;
+    private String palabras_preguntada;
+    private Integer aciertos=0;
 
     private ArrayList <String> palabras_preguntar = new ArrayList<String>();
 
@@ -86,6 +88,20 @@ public class ModelIKnowThatWord {
     }
     public String getPalabraPreguntar( Integer numero_palabra_actual)
     {
-        return palabras_preguntar.get(numero_palabra_actual);
+        palabras_preguntada = palabras_preguntar.get(numero_palabra_actual);
+        return palabras_preguntada;
+    }
+    public void setRespuesta( Boolean respuesta){
+        Boolean respuesta_validada = almacen.validarRespuesta(respuesta, palabras_preguntada);
+        System.out.println("Respuesta correcta: " + respuesta_validada);
+        if (respuesta_validada==true)
+        {
+            aciertos++;
+        }
+
+    }
+    public Integer getAciertos()
+    {
+        return aciertos;
     }
 }
