@@ -13,11 +13,13 @@ import java.awt.event.ActionListener;
 public class GUI extends JFrame {
 
 
-    private Timer timerSetWord;
+    private Timer timerSetWord , timerPreguntas, cambioContexto;
     private Header headerProject;
     private Escucha escucha;
     private EscuchaSetWords escuchaSetWords;
-    private JButton inicio, guardar_nombre;
+    private EscuchaPreguntas escuchaPreguntas;
+    private EscuchaCambioContexto escuchaCambioContexto;
+    private JButton inicio, guardar_nombre,si , no ;
     private JPanel jugador_name, panelPrincipal;
     private Jugador jugador;
     private Integer numeroPalabraActual;
@@ -30,16 +32,18 @@ public class GUI extends JFrame {
 
     private TextField nombre;
 
+    private String mensajeContexto= "";
+
     private PanelWords panelWords;
 
     private ModelIKnowThatWord modelIKnowThatWord;
+
 
     /**
      * Constructor of GUI class
      */
     public GUI(){
         initGUI();
-
         //Default JFrame configuration
         this.setTitle("I Know That Word");
         this.setSize(700,500);
@@ -60,8 +64,11 @@ public class GUI extends JFrame {
         headerProject = new Header("I Know That Word", Color.BLACK);
         escucha = new Escucha();
         escuchaSetWords = new EscuchaSetWords();
+        escuchaPreguntas = new EscuchaPreguntas();
+        escuchaCambioContexto = new EscuchaCambioContexto();
         jugador = new Jugador();
         modelIKnowThatWord = new ModelIKnowThatWord();
+        modelIKnowThatWord.verificarNivel();
 
 
 
@@ -105,6 +112,8 @@ public class GUI extends JFrame {
         panelWords.pintarPalabra("Nivel: 1");
 
         timerSetWord = new Timer(500, escuchaSetWords);
+        timerPreguntas = new Timer(500, escuchaPreguntas);
+        cambioContexto = new Timer(5000, escuchaCambioContexto);
 
         this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
 
@@ -174,7 +183,7 @@ public class GUI extends JFrame {
                     JOptionPane.showMessageDialog(null, "El nombre es muy corto o está vacío");
                 }
                 Iniciar();
-            }
+            }  
 
 
 
@@ -185,8 +194,11 @@ public class GUI extends JFrame {
             remove(jugador_name);
             add(panelPrincipal);
             panelWords.setVisible(true);
-            numeroPalabraActual = 1;
+            numeroPalabraActual = 0;
             timerSetWord.start();
+            inicio.setVisible(false);
+            headerProject = new Header("nivel" + nivelActual, Color.BLACK);
+            panelWords.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
             revalidate();
             repaint();
         }
@@ -195,14 +207,66 @@ public class GUI extends JFrame {
     private class EscuchaSetWords implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
+
             Integer totalAMemorizar = modelIKnowThatWord.getPalabrasMemorizar();
             numeroPalabraActual++;
             panelWords.pintarPalabra(modelIKnowThatWord.getPalabraMemorizar());
-            if (numeroPalabraActual == 11)
+
+            if (numeroPalabraActual == totalAMemorizar)
             {
                 timerSetWord.stop();
+                mensajeContexto = "Responde si o no";
+                panelWords.pintarPalabra(mensajeContexto);
+                cambioContexto.start();
+
             }
+
+        }
+        private void preguntar(){
+            modelIKnowThatWord.setPalabrasPreguntar();
+            numeroPalabraActual= 0;
+            timerPreguntas.start();
+            si = new JButton("Si");
+            no = new JButton("No");
+            si.setSize(100,100);
+            no.setSize(100,100);
+            JPanel panelInferior = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            panelInferior.add(si);
+            panelInferior.add(no);
+            panelPrincipal.add(panelInferior, BorderLayout.SOUTH);
+            repaint();
+            revalidate();
+
         }
 
+
+
     }
+    private class EscuchaPreguntas implements ActionListener{
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            panelWords.pintarPalabra(modelIKnowThatWord.getPalabraPreguntar(numeroPalabraActual));
+            Integer totalAMemorizar = modelIKnowThatWord.getPalabrasMemorizar();
+            numeroPalabraActual++;
+            if (numeroPalabraActual == totalAMemorizar*2){
+                timerPreguntas.stop();
+                mensajeContexto = "Fin del juego";
+                panelWords.pintarPalabra(mensajeContexto);
+
+            }
+
+        }
+    }
+
+    private class EscuchaCambioContexto implements ActionListener{
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            escuchaSetWords.preguntar();
+            cambioContexto.stop();
+        }
+    }
+
+
+
 }

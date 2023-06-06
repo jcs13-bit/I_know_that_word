@@ -4,9 +4,18 @@ import myProject.AdministradorArchivo;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Collections;
 
 public class Almacen {
     private ArrayList<String> diccionario = new ArrayList<String>();
+    private ArrayList<String> palabras_vistas = new ArrayList<String>();
+
+    private ArrayList<String> palabras_preguntar = new ArrayList<String>();
+    private ModelIKnowThatWord modelIKnowThatWord;
+
+
+
+
 
     public Almacen() {
         AdministradorArchivo fileManager = new AdministradorArchivo();
@@ -18,8 +27,38 @@ public class Almacen {
      */
     public String getFrase() {
         Random aleatorio = new Random();
-        return diccionario.get(aleatorio.nextInt(diccionario.size()));
+        String palabra = diccionario.get(aleatorio.nextInt(diccionario.size()));
+
+        if (!palabras_vistas.contains(palabra)){
+            palabras_vistas.add(palabra);
+
+
+        }else{
+            getFrase();
+        }
+        System.out.println(palabras_vistas);
+        return palabra;
+
+
     }
+
+    public ArrayList <String> getPalabras_preguntar(Integer totalAMemorizar){
+        palabras_preguntar = new ArrayList<>(palabras_vistas);
+
+
+        for (int i = 0; i < totalAMemorizar; i++) {
+            Random aleatorio = new Random();
+            String palabra = diccionario.get(aleatorio.nextInt(diccionario.size()));
+            if (!palabras_vistas.contains(palabra)){
+                palabras_preguntar.add(palabra);
+            }
+        }
+        Collections.shuffle(palabras_preguntar);
+        System.out.println(palabras_preguntar);
+
+        return palabras_preguntar;
+    }
+
 
     public ArrayList<String> getDiccionario() {
         return diccionario;

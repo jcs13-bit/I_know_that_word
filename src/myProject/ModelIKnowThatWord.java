@@ -1,5 +1,7 @@
 package myProject;
 
+import java.util.ArrayList;
+
 public class ModelIKnowThatWord {
 
 
@@ -7,6 +9,8 @@ public class ModelIKnowThatWord {
     private Integer aciertosNecesarios;
     private Integer nivelActual;
     private Almacen almacen;
+
+    private ArrayList <String> palabras_preguntar = new ArrayList<String>();
 
     public ModelIKnowThatWord()
     {
@@ -26,6 +30,7 @@ public class ModelIKnowThatWord {
             case 1:
                 palabrasMemorizar = 10;
                 aciertosNecesarios = 14;
+
                 break;
             case 2:
                 palabrasMemorizar = 20;
@@ -74,5 +79,13 @@ public class ModelIKnowThatWord {
     public  String getPalabraMemorizar()
     {
         return almacen.getFrase();
+    }
+    public void setPalabrasPreguntar()
+    {
+        palabras_preguntar = almacen.getPalabras_preguntar(palabrasMemorizar);
+    }
+    public String getPalabraPreguntar( Integer numero_palabra_actual)
+    {
+        return palabras_preguntar.get(numero_palabra_actual);
     }
 }
