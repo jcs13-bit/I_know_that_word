@@ -113,11 +113,25 @@ public class GUI extends JFrame {
         setFocusable(true);
         panelWords.pintarPalabra("Nivel: 1");
 
-        timerSetWord = new Timer(500, escuchaSetWords);
+        timerSetWord = new Timer(5000, escuchaSetWords);
         timerPreguntas = new Timer(7000, escuchaPreguntas);
         cambioContexto = new Timer(5000, escuchaCambioContexto);
 
         this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
+
+
+        // BUTTONS
+        si = new JButton("Si");
+        no = new JButton("No");
+        si.addActionListener(escuchaRespuestas);
+        no.addActionListener(escuchaRespuestas);
+        si.setSize(100,100);
+        no.setSize(100,100);
+        panelInferiorBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        panelInferiorBotones.add(si);
+        panelInferiorBotones.add(no);
+        panelInferiorBotones.setVisible(false);
+        //panelPrincipal.add(panelInferiorBotones, BorderLayout.SOUTH);
 
         botonAyuda.addActionListener(new ActionListener() {
             @Override
@@ -228,16 +242,6 @@ public class GUI extends JFrame {
             modelIKnowThatWord.setPalabrasPreguntar();
             numeroPalabraActual= 0;
             timerPreguntas.start();
-            si = new JButton("Si");
-            no = new JButton("No");
-            si.addActionListener(escuchaRespuestas);
-            no.addActionListener(escuchaRespuestas);
-            si.setSize(100,100);
-            no.setSize(100,100);
-            panelInferiorBotones = new JPanel(new FlowLayout(FlowLayout.CENTER));
-            panelInferiorBotones.add(si);
-            panelInferiorBotones.add(no);
-            panelInferiorBotones.setVisible(false);
             panelPrincipal.add(panelInferiorBotones, BorderLayout.SOUTH);
             repaint();
             revalidate();
@@ -249,6 +253,7 @@ public class GUI extends JFrame {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            panelInferiorBotones.setVisible(false);
             if (e.getSource() == si){
                    modelIKnowThatWord.setRespuesta(true);
 
@@ -269,12 +274,56 @@ public class GUI extends JFrame {
             Integer totalAMemorizar = modelIKnowThatWord.getPalabrasMemorizar();
             numeroPalabraActual++;
             if (numeroPalabraActual == totalAMemorizar*2){
+                panelInferiorBotones.setVisible(false);
+                numeroPalabraActual= 0;
                 timerPreguntas.stop();
-                mensajeContexto = "Fin del juego";
-                panelWords.pintarPalabra(mensajeContexto);
+                Integer aciertos = modelIKnowThatWord.getAciertos();
+                String estadoDeJuego = modelIKnowThatWord.estadoDeJuego();
+                if (estadoDeJuego == "ganaste"){
+                    panelWords.pintarPalabra("Aciertos " + aciertos);
+                    setTimeout(() -> panelWords.pintarPalabra("Felicidades!! Ganaste"), 7000);
+                    setTimeout(() -> avanzarNivel(), 14000);
+                }else{
+                    panelWords.pintarPalabra("Aciertos " + aciertos);
+                    setTimeout(() -> panelWords.pintarPalabra("Perdiste... Intentalo de nuevo"), 7000);
+                    setTimeout(() -> reiniciarNivel(), 14000);
+                }
+
+
 
             }
 
+        }
+
+        public static void setTimeout(Runnable runnable, int delay){
+            new Thread(() -> {
+                try {
+                    Thread.sleep(delay);
+                    runnable.run();
+                }
+                catch (Exception e){
+                    System.err.println(e);
+                }
+            }).start();
+        }
+
+        public void avanzarNivel()
+        {
+            nivelActual++;
+            modelIKnowThatWord.avanzarNivel();
+            modelIKnowThatWord.verificarNivel();
+            headerProject.setText("Nivel: " + nivelActual);
+            panelWords.pintarPalabra("Nivel " + nivelActual + ", Preparate");
+            setTimeout(() -> timerSetWord.start(), 7000);
+        }
+
+        public void reiniciarNivel()
+        {
+            modelIKnowThatWord.reiniciarNivel();
+            modelIKnowThatWord.verificarNivel();
+            headerProject.setText("Nivel: " + nivelActual);
+            panelWords.pintarPalabra("Nivel " + nivelActual + ", Preparate");
+            setTimeout(() -> timerSetWord.start(), 7000);
         }
     }
 

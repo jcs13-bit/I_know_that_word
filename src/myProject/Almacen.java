@@ -49,8 +49,10 @@ public class Almacen {
         for (int i = 0; i < totalAMemorizar; i++) {
             Random aleatorio = new Random();
             String palabra = diccionario.get(aleatorio.nextInt(diccionario.size()));
-            if (!palabras_vistas.contains(palabra)){
+            if (!palabras_vistas.contains(palabra)) {
                 palabras_preguntar.add(palabra);
+            }else{
+                i--;
             }
         }
         Collections.shuffle(palabras_preguntar);
@@ -76,7 +78,11 @@ public class Almacen {
         else{
             return false;
         }
+    }
 
-
+    public void limpiarAlmacen()
+    {
+        palabras_vistas.clear();
+        palabras_preguntar.clear();
     }
 }

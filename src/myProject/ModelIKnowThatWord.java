@@ -104,4 +104,30 @@ public class ModelIKnowThatWord {
     {
         return aciertos;
     }
+
+    public String estadoDeJuego()
+    {
+        if (aciertos >= aciertosNecesarios)
+        {
+            return "ganaste";
+        }else{
+            return "perdiste";
+        }
+    }
+
+    public void avanzarNivel()
+    {
+        nivelActual++;
+        palabras_preguntada = "";
+        aciertos = 0;
+        almacen.limpiarAlmacen();
+
+    }
+
+    public void reiniciarNivel()
+    {
+        palabras_preguntada = "";
+        aciertos = 0;
+        almacen.limpiarAlmacen();
+    }
 }
