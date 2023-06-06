@@ -36,7 +36,6 @@ public class Almacen {
         }else{
             getFrase();
         }
-        System.out.println(palabras_vistas);
         return palabra;
 
 
@@ -56,7 +55,6 @@ public class Almacen {
             }
         }
         Collections.shuffle(palabras_preguntar);
-        System.out.println(palabras_preguntar);
 
         return palabras_preguntar;
     }

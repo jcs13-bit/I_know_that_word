@@ -182,8 +182,7 @@ public class GUI extends JFrame {
 
                 jugador_nombre = nombre.getText().replaceAll("\\s", "");
 
-                System.out.println(nombre);
-                System.out.println(jugador_nombre);
+
 
 
 
