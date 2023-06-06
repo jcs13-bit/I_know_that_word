@@ -12,11 +12,15 @@ import java.awt.event.ActionListener;
  */
 public class GUI extends JFrame {
 
+
+    private Timer timerSetWord;
     private Header headerProject;
     private Escucha escucha;
+    private EscuchaSetWords escuchaSetWords;
     private JButton inicio, guardar_nombre;
     private JPanel jugador_name, panelPrincipal;
     private Jugador jugador;
+    private Integer numeroPalabraActual;
 
     private String jugador_nombre = null;
 
@@ -26,6 +30,9 @@ public class GUI extends JFrame {
 
     private TextField nombre;
 
+    private PanelWords panelWords;
+
+    private ModelIKnowThatWord modelIKnowThatWord;
 
     /**
      * Constructor of GUI class
@@ -52,7 +59,9 @@ public class GUI extends JFrame {
         //Set up JComponents
         headerProject = new Header("I Know That Word", Color.BLACK);
         escucha = new Escucha();
+        escuchaSetWords = new EscuchaSetWords();
         jugador = new Jugador();
+        modelIKnowThatWord = new ModelIKnowThatWord();
 
 
 
@@ -88,7 +97,14 @@ public class GUI extends JFrame {
         panelPrincipal.add(panelInferior, BorderLayout.SOUTH);
 
         this.add(panelPrincipal);
+        panelWords= new PanelWords();
+        panelWords.setVisible(false);
+        panelPrincipal.add(panelWords, BorderLayout.CENTER);
+        //this.addKeyListener(escucha);
+        setFocusable(true);
+        panelWords.pintarPalabra("Nivel: 1");
 
+        timerSetWord = new Timer(500, escuchaSetWords);
 
         this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
 
@@ -180,8 +196,36 @@ public class GUI extends JFrame {
                 } else {
                     JOptionPane.showMessageDialog(null, "El nombre es muy corto o está vacío");
                 }
+                Iniciar();
             }
 
+
+
         }
+
+        public void Iniciar()
+        {
+            remove(jugador_name);
+            add(panelPrincipal);
+            panelWords.setVisible(true);
+            numeroPalabraActual = 1;
+            timerSetWord.start();
+            revalidate();
+            repaint();
+        }
+    }
+
+    private class EscuchaSetWords implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Integer totalAMemorizar = modelIKnowThatWord.getPalabrasMemorizar();
+            numeroPalabraActual++;
+            panelWords.pintarPalabra(modelIKnowThatWord.getPalabraMemorizar());
+            if (numeroPalabraActual == 11)
+            {
+                timerSetWord.stop();
+            }
+        }
+
     }
 }
