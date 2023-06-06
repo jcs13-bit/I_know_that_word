@@ -130,4 +130,9 @@ public class ModelIKnowThatWord {
         aciertos = 0;
         almacen.limpiarAlmacen();
     }
+    public void setNivelActual( Integer nivel)
+    {
+        nivelActual = nivel;
+    }
+
 }

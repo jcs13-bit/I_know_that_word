@@ -46,7 +46,7 @@ public class Almacen {
         palabras_preguntar = new ArrayList<>(palabras_vistas);
 
 
-        for (int i = 0; i < totalAMemorizar; i++) {
+        for (int i = 0; i <= totalAMemorizar; i++) {
             Random aleatorio = new Random();
             String palabra = diccionario.get(aleatorio.nextInt(diccionario.size()));
             if (!palabras_vistas.contains(palabra)) {
