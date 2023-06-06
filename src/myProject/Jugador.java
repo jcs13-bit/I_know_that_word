@@ -14,9 +14,9 @@ public class Jugador {
     public ArrayList<String> listaNiveles = new ArrayList<String>();
 
     public Jugador() {
-        Archivos fileManager = new Archivos();
-        listaJugadores = fileManager.leerArchivo("jugadores.txt");
-        listaNiveles = fileManager.leerArchivo("niveles.txt");
+        AdministradorArchivo fileManager = new AdministradorArchivo();
+        listaJugadores = fileManager.lecturaFile();
+        listaNiveles = fileManager.lecturaFile();
         puesto = 0;
         usuario = "";
         nivel = 1;
