@@ -5,14 +5,9 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-/**
- * This class is used for ...
- * @autor Carlos Felipe Montoya carlos.felipe.montoya@correounivalle.edu.co
- * @version v.1.0.0 date:21/03/2023
- */
 public class GUI extends JFrame {
 
-
+    // Declaración de variables
     private Timer timerSetWord , timerPreguntas, cambioContexto;
     private Header headerProject;
     private Escucha escucha;
@@ -41,11 +36,11 @@ public class GUI extends JFrame {
 
 
     /**
-     * Constructor of GUI class
+     * Constructor de la clase GUI
      */
     public GUI(){
         initGUI();
-        //Default JFrame configuration
+        // Configuración predeterminada del JFrame
         this.setTitle("I Know That Word");
         this.setSize(700,500);
         this.setResizable(false);
@@ -209,7 +204,7 @@ public class GUI extends JFrame {
 
 
         }
-
+        //nivel
         public void Iniciar()
         {
             remove(jugador_name);
@@ -224,7 +219,7 @@ public class GUI extends JFrame {
             repaint();
         }
     }
-
+    //logica para saber si la palabra concuerda con la respuesta
     private class EscuchaSetWords implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -271,7 +266,7 @@ public class GUI extends JFrame {
     }
     private class EscuchaPreguntas implements ActionListener{
 
-
+        //logica de aciertos y desaciertos
         @Override
         public void actionPerformed(ActionEvent e) {
             panelInferiorBotones.setVisible(true);
@@ -311,7 +306,7 @@ public class GUI extends JFrame {
                 }
             }).start();
         }
-
+        //avanzar nivel
         public void avanzarNivel()
         {
             nivelActual++;
@@ -323,7 +318,7 @@ public class GUI extends JFrame {
             setTimeout(() -> timerSetWord.start(), 7000);
 
         }
-
+        //reiniciar nivel
         public void reiniciarNivel()
         {
             modelIKnowThatWord.reiniciarNivel();
@@ -333,7 +328,7 @@ public class GUI extends JFrame {
             setTimeout(() -> timerSetWord.start(), 7000);
         }
     }
-
+    //cambio de contecto
     private class EscuchaCambioContexto implements ActionListener{
         @Override
         public void actionPerformed(ActionEvent e) {
