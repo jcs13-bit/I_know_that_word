@@ -113,9 +113,9 @@ public class GUI extends JFrame {
         setFocusable(true);
 
 
-        timerSetWord = new Timer(1000, escuchaSetWords);
-        timerPreguntas = new Timer(4000, escuchaPreguntas);
-        cambioContexto = new Timer(5000, escuchaCambioContexto);
+        timerSetWord = new Timer(5000, escuchaSetWords);
+        timerPreguntas = new Timer(7000, escuchaPreguntas);
+        cambioContexto = new Timer(4000, escuchaCambioContexto);
 
         this.add(headerProject,BorderLayout.NORTH); //Change this line if you change JFrame Container's Layout
 
